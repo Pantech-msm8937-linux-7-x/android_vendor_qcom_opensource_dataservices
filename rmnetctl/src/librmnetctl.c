@@ -1059,6 +1059,82 @@ int rmnet_add_del_vnd_tc_flow(rmnetctl_hndl_t *hndl,
 	} while(0);
 	return return_code;
 }
+#else
+/* The old rmnet_data API, for blobs (netmgrd) that link against it but use
+ * the rtnetlink one (rtrmnet_*) with the upstream rmnet driver: none of it
+ * is there.
+ */
+int rmnetctl_init(rmnetctl_hndl_t **hndl, uint16_t *error_code)
+{
+	if (hndl)
+		*hndl = NULL;
+	if (error_code)
+		*error_code = RMNETCTL_API_ERR_HNDL_INVALID;
+	return RMNETCTL_LIB_ERR;
+}
+
+void rmnetctl_cleanup(rmnetctl_hndl_t *hndl)
+{
+	(void)hndl;
+}
+
+#define RMNETCTL_OLD_API_STUB(...) \
+	{ \
+		if (error_code) \
+			*error_code = RMNETCTL_API_ERR_HNDL_INVALID; \
+		return RMNETCTL_LIB_ERR; \
+	}
+
+int rmnet_associate_network_device(rmnetctl_hndl_t *hndl, const char *dev_name,
+				   uint16_t *error_code, uint8_t assoc_dev)
+RMNETCTL_OLD_API_STUB()
+
+int rmnet_set_link_egress_data_format(rmnetctl_hndl_t *hndl,
+				      uint32_t egress_flags, uint16_t agg_size,
+				      uint16_t agg_count, const char *dev_name,
+				      uint16_t *error_code)
+RMNETCTL_OLD_API_STUB()
+
+int rmnet_get_link_egress_data_format(rmnetctl_hndl_t *hndl,
+				      const char *dev_name,
+				      uint32_t *egress_flags,
+				      uint16_t *agg_size, uint16_t *agg_count,
+				      uint16_t *error_code)
+RMNETCTL_OLD_API_STUB()
+
+int rmnet_set_link_ingress_data_format_tailspace(rmnetctl_hndl_t *hndl,
+						 uint32_t ingress_flags,
+						 uint8_t tail_spacing,
+						 const char *dev_name,
+						 uint16_t *error_code)
+RMNETCTL_OLD_API_STUB()
+
+int rmnet_set_logical_ep_config(rmnetctl_hndl_t *hndl, int32_t ep_id,
+				uint8_t operating_mode, const char *dev_name,
+				const char *next_dev, uint16_t *error_code)
+RMNETCTL_OLD_API_STUB()
+
+int rmnet_unset_logical_ep_config(rmnetctl_hndl_t *hndl, int32_t ep_id,
+				  const char *dev_name, uint16_t *error_code)
+RMNETCTL_OLD_API_STUB()
+
+int rmnet_new_vnd_prefix(rmnetctl_hndl_t *hndl, uint32_t id,
+			 uint16_t *error_code, uint8_t new_vnd,
+			 const char *prefix)
+RMNETCTL_OLD_API_STUB()
+
+int rmnet_new_vnd(rmnetctl_hndl_t *hndl, uint32_t id, uint16_t *error_code,
+		  uint8_t new_vnd)
+RMNETCTL_OLD_API_STUB()
+
+int rmnet_get_vnd_name(rmnetctl_hndl_t *hndl, uint32_t id,
+		       uint16_t *error_code, char *buf, uint32_t buflen)
+RMNETCTL_OLD_API_STUB()
+
+int rmnet_add_del_vnd_tc_flow(rmnetctl_hndl_t *hndl, uint32_t id,
+			      uint32_t map_flow_id, uint32_t tc_flow_id,
+			      uint8_t set_flow, uint16_t *error_code)
+RMNETCTL_OLD_API_STUB()
 #endif
 
 /*

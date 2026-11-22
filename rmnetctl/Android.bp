@@ -7,6 +7,7 @@ soong_config_module_type {
     ],
     properties: [
         "cflags",
+        "header_libs",
     ],
 }
 
@@ -26,6 +27,13 @@ rmnetctl_cc_defaults {
     soong_config_variables: {
         old_rmnet_data: {
             cflags: ["-DUSE_OLD_RMNET_DATA"],
+            /* linux/rmnet_data.h: the upstream rmnet driver needs no kernel
+             * headers but those of bionic
+             */
+            header_libs: [
+                "qti_kernel_headers",
+                "device_kernel_headers",
+            ],
         },
     },
     vendor: true,
@@ -33,10 +41,6 @@ rmnetctl_cc_defaults {
 
 cc_library_shared {
     name: "librmnetctl",
-    header_libs: [
-        "qti_kernel_headers",
-        "device_kernel_headers",
-    ],
     defaults: ["librmnetctl_defaults"],
     srcs: ["src/librmnetctl.c"],
 }
